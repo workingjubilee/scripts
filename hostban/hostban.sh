@@ -8,6 +8,10 @@ display_help() {
 EOM
 }
 
+ban_url() {
+  echo "127.0.0.1 $1" 1>> /etc/hosts
+}
+
 if [ $(id -u) -ne 0 ]; then
   display_help
   echo "\n  This script requires root privileges, please run this with sudo ./hostban.sh"
@@ -16,7 +20,9 @@ fi
 
 case $1 in 
   --ban)
-    echo "api.twitter.com\nmobile.twitter.com\nwww.twitter.com" 1>> /etc/hosts
+    ban_url "api.twitter.com"
+    ban_url "mobile.twitter.com"
+    ban_url "www.twitter.com"
     ;;
   --unban)
     # \x2E specifies the "dot" character in hexadecimal
