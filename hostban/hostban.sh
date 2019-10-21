@@ -1,14 +1,17 @@
 #!/bin/sh
+# Requires root to edit /etc/hosts
 
 display_help() {
   cat << EOM
   USAGE:
-  --ban (site) to add a site to hostbans
-  --unban (site) to remove a site from hostbans
+  hostban.sh ban [SITE] to add a site to hostbans
+  hostban.sh unban [SITE] to remove a site from hostbans
+  Banning/unbanning sites other than twitter is not currently implemented ^_^;;
 EOM
 }
 
 ban_url() {
+  # Applies the loopback address to the URL
   echo "127.0.0.1 $1" 1>> /etc/hosts
 }
 
@@ -19,12 +22,12 @@ if [ $(id -u) -ne 0 ]; then
 fi
 
 case $1 in 
-  --ban)
+  ban)
     ban_url "api.twitter.com"
     ban_url "mobile.twitter.com"
     ban_url "www.twitter.com"
     ;;
-  --unban)
+  unban)
     # \x2E specifies the "dot" character in hexadecimal
     sed -i '/twitter\x2Ecom/d' /etc/hosts
     ;;
